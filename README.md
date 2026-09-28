@@ -45,6 +45,46 @@ Within this repository, `AGENTS.md` routes requests such as “Ask Jev which tes
 suite to run first” to the skill. See [the skill instructions](skills/jev-decide/SKILL.md)
 for the input format, direct CLI usage, privacy controls, and result semantics.
 
+## Ask Jev in natural language
+
+Once your agent has loaded the skill and you have configured your API key, ask
+in ordinary conversation. You do not need to write JSON, provide a skill path,
+or type a command. Phrasing and capitalization do not need to match exactly.
+
+For example:
+
+- “Ask Jev which existing test suite we should run first for this change.”
+- “Use Jev to choose which component to investigate based on these error logs.”
+- “Consult Jev on which of these files is most relevant to the bug.”
+- “Run these two implementation options by Jev.”
+- “Let Jev decide between the approaches we just discussed.”
+
+If the decision is already clear from the conversation, a short follow-up such
+as “Ask Jev” or “Run this through Jev” is enough. Otherwise, include the choice
+and the evidence that matters. For example:
+
+> Ask Jev whether to investigate authentication, invoice rendering, or the
+> database first. Sign-in succeeds, the database query returns the invoice,
+> and the download fails with an error in renderInvoicePdf.
+
+The agent uses the current task to prepare a focused question, concrete options,
+and relevant context, then calls Jev. It asks for clarification only when it
+cannot infer the decision. Jev selects among the supplied options; the agent
+reports the actual recommendation, confidence, and probabilities when available.
+Any explanation supplied by the agent is its interpretation, not a written
+rationale from Jev.
+
+To inspect the request without calling the API, say:
+
+> Prepare a Jev decision for these options, but only preview it. Do not make a
+> live call.
+
+Requests for Jev's decision normally make a live call when credentials are
+configured. Merely discussing Jev or asking to edit the skill does not. If the
+key is missing, the API is unavailable, or the answer is too uncertain, the agent
+reports the fallback and continues with ordinary judgment. A recommendation is
+advisory and does not grant permission for additional actions or waive checks.
+
 ## Repository contents
 
 - `skills/jev-decide/` — portable skill, agent metadata, and CLI helper.
